@@ -13,7 +13,7 @@ Restarting
 pm2 restart all
 pm2 reload all
 ```
-
+[pm2 Docs Quickstart](https://pm2.keymetrics.io/docs/usage/quick-start/)
 
 # create-svelte
 
