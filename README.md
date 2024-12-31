@@ -1,10 +1,14 @@
 # Deployment 
-pm2 application
-- Starting the application
+
+##  pm2 application
+
+Starting the application
+
 ```bash
 pm2 start app.js
 ```
-- Restarting
+
+Restarting
 ```bash
 pm2 restart all
 pm2 reload all
