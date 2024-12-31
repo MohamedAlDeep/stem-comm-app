@@ -1,3 +1,16 @@
+# Deployment 
+pm2 application
+- Starting the application
+```bash
+pm2 start app.js
+```
+- Restarting
+```bash
+pm2 restart all
+pm2 reload all
+```
+
+
 # create-svelte
 
 Everything you need to build a Svelte library, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
