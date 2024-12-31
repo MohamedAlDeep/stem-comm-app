@@ -1,3 +1,15 @@
 {
-	"/": []
+	"/": [],
+	"/announcements/general": [
+		"src/routes/announcements/general/+page.server.js"
+	],
+	"/announcements/teams/[team]": [
+		"src/routes/announcements/teams/[team]/+page.server.js"
+	],
+	"/discussions/general": [
+		"src/routes/discussions/general/+page.server.js"
+	],
+	"/discussions/teams/[team]": [
+		"src/routes/discussions/teams/[team]/+page.server.js"
+	]
 }
