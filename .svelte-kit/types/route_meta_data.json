@@ -1,11 +1,19 @@
 {
 	"/": [],
+	"/admin": [],
 	"/admin/posts": [
 		"src/routes/admin/posts/+page.server.js"
+	],
+	"/admin/replies": [
+		"src/routes/admin/replies/+page.server.js"
+	],
+	"/admin/users": [
+		"src/routes/admin/users/+page.server.js"
 	],
 	"/announcements/general": [
 		"src/routes/announcements/general/+page.server.js"
 	],
+	"/announcements/teams": [],
 	"/announcements/teams/[team]": [
 		"src/routes/announcements/teams/[team]/+page.server.js"
 	],
@@ -24,6 +32,7 @@
 	"/discussions/general": [
 		"src/routes/discussions/general/+page.server.js"
 	],
+	"/discussions/teams": [],
 	"/discussions/teams/[team]": [
 		"src/routes/discussions/teams/[team]/+page.server.js"
 	]

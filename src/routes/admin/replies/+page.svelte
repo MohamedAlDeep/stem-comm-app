@@ -3,19 +3,19 @@
     // console.log(data.posts);
 </script>
 
-<h1>Posts</h1>
+<h1>Replies</h1>
 
 <h1>Links</h1>
 <a href="/">Home</a>
 <a href="/admin">Admin Panel</a>
 
-    {#each data.posts as post}
+    {#each data.replies as reply}
         <div class="post">
-            <li>Owner: {post.creator}</li>
-            <li>Title: {post.title}</li>
-            <li>Content: <p>{post.content}</p></li>
-            <li>Date: {new Date(post.date).toLocaleString()}</li>
-            <li>Replies: {post.replies_number}</li>
+            <li>Owner: {reply.creator}</li>
+            <li>Title: {reply.title}</li>
+            <li>Content: <p>{reply.content}</p></li>
+            <li>Date: {new Date(parseInt(reply.date))}</li>
+            <li>Reply ID: {reply.reply_id}</li>
         </div>
     {/each}
 

@@ -66,7 +66,7 @@ export async function User_Posts_from_id(id){
       JOIN users ON posts.user_id = users.id
       WHERE users.id = ${id};    
   `)
-  console.log(res.rows)
+  return {...res.rows}
 } 
 export async function insertRow_to_posts(creator, title, content, date, replies_number, replies_links) {
   const query = `
@@ -100,7 +100,57 @@ export async function deleteRow_to_posts(id) {
   console.log('Row deleted successfully')
 }
 
+export async function User_from_id(id){
+  const res = await newClient.query(`
+      SELECT posts.id, posts.content
+      FROM posts
+      JOIN users ON posts.user_id = users.id
+      WHERE users.id = ${id};    
+  `)
+  console.log(res.rows)
+} 
+export async function insertRow_to_users(username, first_name, last_name, email, providor, created_on) {
+  const query = `
+  INSERT INTO users (username, first_name, last_name, email, providor, created_on)
+  VALUES ($1, $2, $3, $4, $5, $6)
+  RETURNING *;
+  `;
+  const values = [username, first_name, last_name, email, providor, created_on];
+  const res = await newClient.query(query, values);
+  return {response: res, data: values}
+}
 
+export async function updateRow_to_users(id, title, content, replies_number, replies_links) {  
+  await newClient.query(`
+  UPDATE posts
+  SET title = ${title}
+  SET content =  ${content}
+  SET replies_number =  ${replies_number}
+  replies_links =  ${replies_links}
+  WHERE id = ${id};
+  `)
+  console.log('Row updated successfully')
+}
+
+// Delete a row
+export async function deleteRow_to_users(id) {
+  await newClient.query(`
+  DELETE FROM posts,
+  WHERE id = ${id};
+  `)
+  console.log('Row deleted successfully')
+}
+
+export async function insertRow_to_reply(creator, title, content, date, reply_id) {
+  const query = `
+  INSERT INTO replies (creator, title, content, date, reply_id)
+  VALUES ($1, $2, $3, $4, $5)
+  RETURNING *;
+  `;
+  const values = [creator, title, content, date, reply_id];
+  const res = await newClient.query(query, values);
+  return {response: res, data: values}
+}
 
 await newClient.connect()
 
