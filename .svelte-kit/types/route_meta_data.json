@@ -1,10 +1,25 @@
 {
 	"/": [],
+	"/admin/posts": [
+		"src/routes/admin/posts/+page.server.js"
+	],
 	"/announcements/general": [
 		"src/routes/announcements/general/+page.server.js"
 	],
 	"/announcements/teams/[team]": [
 		"src/routes/announcements/teams/[team]/+page.server.js"
+	],
+	"/api/posts/all": [
+		"src/routes/api/posts/all/+server.js"
+	],
+	"/api/posts/insert": [
+		"src/routes/api/posts/insert/+server.js"
+	],
+	"/api/users/all": [
+		"src/routes/api/users/all/+server.js"
+	],
+	"/api/users/insert": [
+		"src/routes/api/users/insert/+server.js"
 	],
 	"/discussions/general": [
 		"src/routes/discussions/general/+page.server.js"

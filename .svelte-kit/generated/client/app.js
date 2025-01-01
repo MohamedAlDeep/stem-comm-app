@@ -7,17 +7,19 @@ export const nodes = [
 	() => import('./nodes/3'),
 	() => import('./nodes/4'),
 	() => import('./nodes/5'),
-	() => import('./nodes/6')
+	() => import('./nodes/6'),
+	() => import('./nodes/7')
 ];
 
 export const server_loads = [];
 
 export const dictionary = {
 		"/": [2],
-		"/announcements/general": [~3],
-		"/announcements/teams/[team]": [~4],
-		"/discussions/general": [~5],
-		"/discussions/teams/[team]": [~6]
+		"/admin/posts": [~3],
+		"/announcements/general": [~4],
+		"/announcements/teams/[team]": [~5],
+		"/discussions/general": [~6],
+		"/discussions/teams/[team]": [~7]
 	};
 
 export const hooks = {

@@ -26,6 +26,7 @@
  * ```
  */
 declare module '$env/static/private' {
+	export const API_KEY: string;
 	export const USER: string;
 	export const SSH_CLIENT: string;
 	export const npm_config_user_agent: string;
@@ -36,7 +37,6 @@ declare module '$env/static/private' {
 	export const BROWSER: string;
 	export const npm_config_noproxy: string;
 	export const HOME: string;
-	export const OLDPWD: string;
 	export const TERM_PROGRAM_VERSION: string;
 	export const VSCODE_IPC_HOOK_CLI: string;
 	export const npm_package_json: string;
@@ -85,7 +85,6 @@ declare module '$env/static/private' {
 	export const npm_command: string;
 	export const INIT_CWD: string;
 	export const EDITOR: string;
-	export const NODE_ENV: string;
 }
 
 /**
@@ -117,6 +116,7 @@ declare module '$env/static/public' {
  */
 declare module '$env/dynamic/private' {
 	export const env: {
+		API_KEY: string;
 		USER: string;
 		SSH_CLIENT: string;
 		npm_config_user_agent: string;
@@ -127,7 +127,6 @@ declare module '$env/dynamic/private' {
 		BROWSER: string;
 		npm_config_noproxy: string;
 		HOME: string;
-		OLDPWD: string;
 		TERM_PROGRAM_VERSION: string;
 		VSCODE_IPC_HOOK_CLI: string;
 		npm_package_json: string;
@@ -176,7 +175,6 @@ declare module '$env/dynamic/private' {
 		npm_command: string;
 		INIT_CWD: string;
 		EDITOR: string;
-		NODE_ENV: string;
 		[key: `PUBLIC_${string}`]: undefined;
 		[key: `${string}`]: string | undefined;
 	}

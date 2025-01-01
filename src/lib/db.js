@@ -1,6 +1,10 @@
 import pg from 'pg'
 const { Client } = pg
 
+// Import functions from files
+// import { User_Posts_from_id, insertRow_to_posts, updateRow_to_posts, deleteRow_to_posts } from './posts.js'
+// import { User_from_id, insertRow_to_users, updateRow_to_users, deleteRow_to_users } from './users.js'
+
 const newClient = new Client({
   user: '', // replace with your PostgreSQL username
   host: '/var/run/postgresql', // replace with your PostgreSQL host
@@ -8,18 +12,18 @@ const newClient = new Client({
 //   database: 'stem_app'
 })
 
+
+
+
 // Show tables in database
-async function show_tables(){
+export async function show_tables(){
     const res = await newClient.query(`
-        SELECT table_name
-        FROM information_schema.tables
-        WHERE table_schema = 'public'
-        ORDER BY table_name;
+        select * from information_schema.table
     `)
-    console.log(res.rows)
+    return {...res.rows}
 }
-show_tables()
-async function create_table(name){
+
+export async function create_table(name){
     await newClient.query(`
         CREATE TABLE IF NOT EXISTS ${name} (
           id SERIAL PRIMARY KEY,
@@ -31,18 +35,18 @@ async function create_table(name){
           replies_links TEXT[]
         );
       `)      
-    console.log("Table created successfully")
+    return {response: "Table created successfully"}
 }
 
 
 
 
 // Get all rows
-async function getRows(table) {
+export async function getRows(table) {
     const res = await newClient.query(`
     SELECT * FROM ${table};
     `)
-    console.log(res.rows)
+    return [...res.rows]
 }
 
 // Get a specific row
@@ -51,7 +55,53 @@ async function getRow(table, id) {
     SELECT * FROM ${table}
     WHERE id = ${id};
     `)
-    console.log(res.rows)
+    return {...res.rows}
 }
 
+
+export async function User_Posts_from_id(id){
+  const res = await newClient.query(`
+      SELECT posts.id, posts.content
+      FROM posts
+      JOIN users ON posts.user_id = users.id
+      WHERE users.id = ${id};    
+  `)
+  console.log(res.rows)
+} 
+export async function insertRow_to_posts(creator, title, content, date, replies_number, replies_links) {
+  const query = `
+  INSERT INTO posts (creator, title, content, date, replies_number, replies_links)
+  VALUES ($1, $2, $3, $4, $5, $6)
+  RETURNING *;
+  `;
+  const values = [creator, title, content, date, replies_number, replies_links];
+  const res = await newClient.query(query, values);
+  return {response: res, data: values}
+}
+
+export async function updateRow_to_posts(id, title, content, replies_number, replies_links) {  
+  await newClient.query(`
+  UPDATE posts
+  SET title = ${title}
+  SET content =  ${content}
+  SET replies_number =  ${replies_number}
+  replies_links =  ${replies_links}
+  WHERE id = ${id};
+  `)
+  console.log('Row updated successfully')
+}
+
+// Delete a row
+export async function deleteRow_to_posts(id) {
+  await newClient.query(`
+  DELETE FROM posts,
+  WHERE id = ${id};
+  `)
+  console.log('Row deleted successfully')
+}
+
+
+
 await newClient.connect()
+
+
