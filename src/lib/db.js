@@ -50,18 +50,21 @@ export async function getRows(table) {
 }
 
 // Get a specific row
-async function getRow(table, id) {
-    const res = await newClient.query(`
-    SELECT * FROM ${table}
-    WHERE id = ${id};
-    `)
-    return {...res.rows}
+export async function Post_from_id(id) {
+  const query = `
+      SELECT *
+      FROM posts
+      WHERE posts.id = $1;
+  `;
+  const values = [id];
+  const res = await newClient.query(query, values);
+  return res.rows[0];
 }
 
 
 export async function User_Posts_from_id(id){
   const res = await newClient.query(`
-      SELECT posts.id, posts.content
+      SELECT *
       FROM posts
       JOIN users ON posts.user_id = users.id
       WHERE users.id = ${id};    
@@ -79,16 +82,22 @@ export async function insertRow_to_posts(creator, title, content, date, replies_
   return {response: res, data: values}
 }
 
-export async function updateRow_to_posts(id, title, content, replies_number, replies_links) {  
-  await newClient.query(`
-  UPDATE posts
-  SET title = ${title}
-  SET content =  ${content}
-  SET replies_number =  ${replies_number}
-  replies_links =  ${replies_links}
-  WHERE id = ${id};
-  `)
-  console.log('Row updated successfully')
+export async function updateRow_to_posts(id, title, content, replies_number, newReply) {
+  const query = `
+      UPDATE posts
+      SET title = $1,
+        content = $2,
+        replies_number = $3,
+        replies_links = array_append(replies_links, $4::jsonb),
+      WHERE id = $5
+      RETURNING *;
+  `;
+  const newReplyObject = JSON.stringify({ id: newReply.id, creator: newReply.creator });
+  const values = [title, content, replies_number, newReplyObject, id];
+  // console.log(values)
+  const res = await newClient.query(query, values);
+  console.log(res.rows[0])
+  return { response: "Row updated successfully", data: res.rows };
 }
 
 // Delete a row
@@ -109,28 +118,51 @@ export async function User_from_id(id){
   `)
   console.log(res.rows)
 } 
-export async function insertRow_to_users(username, first_name, last_name, email, providor, created_on) {
+export async function insertRow_to_users(username, first_name, last_name, email, providor, created_on, labels) {
   const query = `
-  INSERT INTO users (username, first_name, last_name, email, providor, created_on)
-  VALUES ($1, $2, $3, $4, $5, $6)
+  INSERT INTO users (username, first_name, last_name, email, providor, created_on, labels)
+  VALUES ($1, $2, $3, $4, $5, $6, %7)
   RETURNING *;
   `;
-  const values = [username, first_name, last_name, email, providor, created_on];
+  const values = [username, first_name, last_name, email, providor, created_on, labels];
   const res = await newClient.query(query, values);
   return {response: res, data: values}
 }
 
-export async function updateRow_to_users(id, title, content, replies_number, replies_links) {  
-  await newClient.query(`
+// export async function updateRow_to_users(id, title, content, replies_number, replies_links, labels) {  
+//   await newClient.query(`
+//   UPDATE posts
+//   SET title = ${title}
+//   SET content =  ${content} 
+//   SET replies_number =  ${replies_number}
+//   SET replies_links =  ${replies_links}
+//   SET labels =  ${labels}
+
+//   WHERE id = ${id};
+//   `)
+//   console.log('Row updated successfully')
+// }
+
+// ...existing code...
+
+export async function updateRow_to_users(id, title, content, replies_number, labels, newReply) {  
+  const query = `
   UPDATE posts
-  SET title = ${title}
-  SET content =  ${content}
-  SET replies_number =  ${replies_number}
-  replies_links =  ${replies_links}
-  WHERE id = ${id};
-  `)
-  console.log('Row updated successfully')
+  SET title = $1,
+      content = $2,
+      replies_number = $3,
+      replies_links = array_append(replies_links, $4::jsonb),
+  WHERE id = $5
+  RETURNING *;
+  `;
+  const newReplyObject = JSON.stringify({ id: newReply.id, creator: newReply.creator });
+  const values = [title, content, replies_number, newReplyObject, id];
+  const res = await newClient.query(query, values);
+  console.log('Row updated successfully', res.rows);
+  return { response: "Row updated successfully", data: res.rows };
 }
+
+// ...existing code...
 
 // Delete a row
 export async function deleteRow_to_users(id) {
@@ -149,7 +181,19 @@ export async function insertRow_to_reply(creator, title, content, date, reply_id
   `;
   const values = [creator, title, content, date, reply_id];
   const res = await newClient.query(query, values);
-  return {response: res, data: values}
+
+
+  return res.rows[0]
+}
+export async function Reply_from_id(id) {
+  const query = `
+      SELECT *
+      FROM replies
+      WHERE replies.id = $1;
+  `;
+  const values = [id];
+  const res = await newClient.query(query, values);
+  return { data: res.rows };
 }
 
 await newClient.connect()

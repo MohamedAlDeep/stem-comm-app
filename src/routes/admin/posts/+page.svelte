@@ -1,6 +1,6 @@
 <script>
     export let data;
-    // console.log(data.posts);
+    console.log(data.posts.replies_links);
 </script>
 
 <h1>Posts</h1>
@@ -8,17 +8,34 @@
 <h1>Links</h1>
 <a href="/">Home</a>
 <a href="/admin">Admin Panel</a>
-
+{#if data.posts.length == 0}
+<p>No posts found</p>
+{:else}
     {#each data.posts as post}
+    <!-- <p>{JSON.stringify(post.replies_links}</p> -->
         <div class="post">
             <li>Owner: {post.creator}</li>
             <li>Title: {post.title}</li>
             <li>Content: <p>{post.content}</p></li>
             <li>Date: {new Date(post.date).toLocaleString()}</li>
-            <li>Replies: {post.replies_number}</li>
+            
+            
+            <!-- {#if post.replies_links.length == 0}
+            <p>No replies </p>
+            {:else} -->
+            {#each post.replies_links as reply}
+            <li>Replies List by id</li>
+            <li>Reply: By: {reply.creator} 
+                <a href={`/admin/replies/reply?id=${reply.id}`}>
+                    {reply.id}
+                </a>
+            </li>
+           
+            {/each}
+            <!-- {/if} -->
         </div>
     {/each}
-
+{/if}
 
     <style>
         .post {
