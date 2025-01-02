@@ -8,17 +8,20 @@
 <h1>Links</h1>
 <a href="/">Home</a>
 <a href="/admin">Admin Panel</a>
-
+{#if data.replies.length == 0}
+<p>No replies found</p>
+{:else}
     {#each data.replies as reply}
         <div class="post">
             <li>Owner: {reply.creator}</li>
             <li>Title: {reply.title}</li>
             <li>Content: <p>{reply.content}</p></li>
             <li>Date: {new Date(parseInt(reply.date))}</li>
-            <li>Reply ID: {reply.reply_id}</li>
+            <li>Original Post ID: {reply.reply_id}</li>
+            <a href={`/admin/replies/reply?id=${reply.id}`}>Link</a>
         </div>
     {/each}
-
+{/if}
 
     <style>
         .post {

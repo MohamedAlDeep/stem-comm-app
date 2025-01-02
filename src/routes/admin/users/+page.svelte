@@ -8,7 +8,10 @@
 
 <a href="/">Home</a>
 <a href="/admin">Admin Panel</a>
-
+{#if data.users.length == 0}
+<p>No users found</p>
+{:else}
+    
 {#each data.users as user}
 <div class="post">
     <li>Username: {user.username}</li>
@@ -16,9 +19,12 @@
     <li>Last Name: <p>{user.last_name}</p></li>
     <li>Email: {user.email}</li>
     <li>Providor: {user.providor}</li>
+    <li>Roles: {user.labels}</li>
     <li>Created On: {new Date(parseInt(user.created_on))}</li>
 </div>
 {/each}
+
+{/if}
 
 
 <style>
