@@ -4,6 +4,9 @@
 	"/admin/posts": [
 		"src/routes/admin/posts/+page.server.js"
 	],
+	"/admin/posts/[id]": [
+		"src/routes/admin/posts/[id]/+page.server.js"
+	],
 	"/admin/replies": [
 		"src/routes/admin/replies/+page.server.js"
 	],
@@ -23,8 +26,14 @@
 	"/api/posts/all": [
 		"src/routes/api/posts/all/+server.js"
 	],
+	"/api/posts/delete": [
+		"src/routes/api/posts/delete/+server.js"
+	],
 	"/api/posts/insert": [
 		"src/routes/api/posts/insert/+server.js"
+	],
+	"/api/posts/update": [
+		"src/routes/api/posts/update/+server.js"
 	],
 	"/api/replies/insert": [
 		"src/routes/api/replies/insert/+server.js"

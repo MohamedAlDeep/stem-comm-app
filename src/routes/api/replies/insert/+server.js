@@ -14,17 +14,12 @@ export async function POST({ request }) {
 
     try {
         // Insert the reply
-        const res = await insertRow_to_reply(creator, title, content, date, reply_id);
+        const res = await insertRow_to_reply(creator, title, content, new Date(), reply_id);
         // Get the original post
+        
         const post = await Post_from_id(res.reply_id);
-        // Update the post's replies_links array
-        // await updateRow_to_posts(2, "New Title", "New Content", 2, {id: 2, creator: "Mohamed"})
-        // console.log(post.id, post.title, post.content, post.replies_number + 1, { id: res.id, creator: res.creator })
-
         const final = await updateRow_to_posts(post.id, post.title, post.content, post.replies_number + 1, { id: res.id, creator: res.creator });
-        console.log(final.response)
-        console.log(final.data)
-        return new Response(JSON.stringify({ success: true, final }), { status: 200 });
+        return new Response({ success: true, final }, { status: 200 });
     } catch (error) {
         return new Response('Internal Server Error', { status: 500 });
     }

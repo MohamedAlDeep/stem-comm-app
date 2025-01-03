@@ -81,14 +81,14 @@ export async function insertRow_to_posts(creator, title, content, date, replies_
   const res = await newClient.query(query, values);
   return {response: res, data: values}
 }
-
+// post.id, post.title, post.content, post.replies_number + 1, { id: res.id, creator: res.creator }
 export async function updateRow_to_posts(id, title, content, replies_number, newReply) {
   const query = `
       UPDATE posts
       SET title = $1,
         content = $2,
         replies_number = $3,
-        replies_links = array_append(replies_links, $4::jsonb),
+        replies_links = array_append(replies_links, $4::jsonb)
       WHERE id = $5
       RETURNING *;
   `;
@@ -96,18 +96,44 @@ export async function updateRow_to_posts(id, title, content, replies_number, new
   const values = [title, content, replies_number, newReplyObject, id];
   // console.log(values)
   const res = await newClient.query(query, values);
-  console.log(res.rows[0])
+
+  return { response: "Row updated successfully", data: res.rows };
+}
+
+export async function updateRow_to_posts_FROM_POSTS(creator, title, content, replies_number, replies_links, id) {
+  const query = `
+      UPDATE posts
+      SET title = $1,
+          creator = $2,
+          content = $3,
+          replies_number = $4,
+          replies_links = $5
+      WHERE id = $6
+      RETURNING *;
+  `;
+  const values = [title, creator, content, replies_number, replies_links, id];
+  const res = await newClient.query(query, values);
   return { response: "Row updated successfully", data: res.rows };
 }
 
 // Delete a row
 export async function deleteRow_to_posts(id) {
   await newClient.query(`
-  DELETE FROM posts,
+  DELETE FROM posts
   WHERE id = ${id};
   `)
-  console.log('Row deleted successfully')
+  return {response: "Row deleted successfully"}
 }
+
+export async function insertDeleted_POST(id, creator, title, content, date, replies_number, replies_links, date_deleted) {
+  await newClient.query(`
+    INSERT INTO deletedposts (id_before_deletion, creator, title, content, date, replies_number, replies_links, date_deleted)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8);
+  `, [id, creator, title, content, date, replies_number, replies_links, date_deleted]);
+
+  return {response: "Row deleted successfully"}
+}
+
 
 export async function User_from_id(id){
   const res = await newClient.query(`
@@ -129,21 +155,23 @@ export async function insertRow_to_users(username, first_name, last_name, email,
   return {response: res, data: values}
 }
 
-// export async function updateRow_to_users(id, title, content, replies_number, replies_links, labels) {  
-//   await newClient.query(`
-//   UPDATE posts
-//   SET title = ${title}
-//   SET content =  ${content} 
-//   SET replies_number =  ${replies_number}
-//   SET replies_links =  ${replies_links}
-//   SET labels =  ${labels}
+export async function updateRow_to_users(id, username, first_name, last_name, email, providor, created_on, labels) {  
+  const query = `
+  UPDATE posts
+  SET username = $1,
+  SET first_name =  $2,
+  SET last_name = $3,
+  SET email =  $4,
+  SET providor =  $5,
+  SET labels = $6,
+  WHERE id = $7;
+  `
+  const values = [username, first_name, last_name, email, providor, created_on, labels, id]
+  const res = await newClient.query(query, values);
+  return { response: "Row updated successfully", data: res.rows };
+}
 
-//   WHERE id = ${id};
-//   `)
-//   console.log('Row updated successfully')
-// }
 
-// ...existing code...
 
 export async function updateRow_to_users(id, title, content, replies_number, labels, newReply) {  
   const query = `
@@ -158,7 +186,7 @@ export async function updateRow_to_users(id, title, content, replies_number, lab
   const newReplyObject = JSON.stringify({ id: newReply.id, creator: newReply.creator });
   const values = [title, content, replies_number, newReplyObject, id];
   const res = await newClient.query(query, values);
-  console.log('Row updated successfully', res.rows);
+  
   return { response: "Row updated successfully", data: res.rows };
 }
 

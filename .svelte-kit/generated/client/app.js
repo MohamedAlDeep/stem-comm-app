@@ -14,7 +14,8 @@ export const nodes = [
 	() => import('./nodes/10'),
 	() => import('./nodes/11'),
 	() => import('./nodes/12'),
-	() => import('./nodes/13')
+	() => import('./nodes/13'),
+	() => import('./nodes/14')
 ];
 
 export const server_loads = [];
@@ -23,15 +24,16 @@ export const dictionary = {
 		"/": [2],
 		"/admin": [3],
 		"/admin/posts": [~4],
-		"/admin/replies": [~5],
-		"/admin/replies/reply": [~6],
-		"/admin/users": [~7],
-		"/announcements/general": [~8],
-		"/announcements/teams": [9],
-		"/announcements/teams/[team]": [~10],
-		"/discussions/general": [~11],
-		"/discussions/teams": [12],
-		"/discussions/teams/[team]": [~13]
+		"/admin/posts/[id]": [~5],
+		"/admin/replies": [~6],
+		"/admin/replies/reply": [~7],
+		"/admin/users": [~8],
+		"/announcements/general": [~9],
+		"/announcements/teams": [10],
+		"/announcements/teams/[team]": [~11],
+		"/discussions/general": [~12],
+		"/discussions/teams": [13],
+		"/discussions/teams/[team]": [~14]
 	};
 
 export const hooks = {

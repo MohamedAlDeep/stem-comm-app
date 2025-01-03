@@ -14,24 +14,18 @@
     {#each data.posts as post}
     <!-- <p>{JSON.stringify(post.replies_links}</p> -->
         <div class="post">
+            <li>Post ID: {post.id}</li>
             <li>Owner: {post.creator}</li>
             <li>Title: {post.title}</li>
             <li>Content: <p>{post.content}</p></li>
-            <li>Date: {new Date(post.date).toLocaleString()}</li>
+            <li>Date: {new Date(parseInt(post.date))}</li>
             
-            
+            <li>Replies Count: {post.replies_number}</li>
             <!-- {#if post.replies_links.length == 0}
             <p>No replies </p>
             {:else} -->
-            {#each post.replies_links as reply}
-            <li>Replies List by id</li>
-            <li>Reply: By: {reply.creator} 
-                <a href={`/admin/replies/reply?id=${reply.id}`}>
-                    {reply.id}
-                </a>
-            </li>
-           
-            {/each}
+            
+            <a href={`/admin/posts/${post.id}`}>More info</a>
             <!-- {/if} -->
         </div>
     {/each}
